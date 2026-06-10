@@ -62,7 +62,7 @@ fun WeekView() {
         modifier = Modifier.fillMaxSize()
     ) {
         var state by remember { mutableStateOf(Weekdays.MO) }
-        val titles = listOf("Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag")
+        listOf("Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag")
         Column {
             SecondaryTabRow(selectedTabIndex = state.ordinal) {
                 Weekdays.entries.forEachIndexed { index, title ->
@@ -75,7 +75,7 @@ fun WeekView() {
             }
 
             when(state) {
-                Weekdays.MO -> WeekdayView(Weekdays.MO)
+                Weekdays.MO -> WeekdayView(state)
                 Weekdays.DI -> WeekdayView(state)
                 Weekdays.MI -> WeekdayView(state)
                 Weekdays.DO -> WeekdayView(state)
@@ -102,8 +102,7 @@ fun MonthView() {
 @Composable
 fun WeekdayView(weekday: Weekdays) {
     Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = androidx.compose.ui.Alignment.Center
+        modifier = Modifier.fillMaxSize()
     ) {
         Text(weekday.toString(), style = MaterialTheme.typography.headlineMedium)
     }
