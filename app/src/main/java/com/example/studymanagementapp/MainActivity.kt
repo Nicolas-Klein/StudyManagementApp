@@ -23,7 +23,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.example.studymanagementapp.ui.theme.StudyManagementAppTheme
 import androidx.compose.runtime.getValue
-import androidx.navigation.compose.rememberNavController
 
 enum class PomodoroState {
     FOCUS,
