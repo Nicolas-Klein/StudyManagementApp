@@ -3,7 +3,12 @@ package com.example.studymanagementapp
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Tab
@@ -16,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 
 
 enum class Tabs {
@@ -101,9 +107,20 @@ fun MonthView() {
 
 @Composable
 fun WeekdayView(weekday: Weekdays) {
-    Box(
+
+    var counter = 0;
+
+    Column(
         modifier = Modifier.fillMaxSize()
     ) {
         Text(weekday.toString(), style = MaterialTheme.typography.headlineMedium)
+        Text(counter.toString())
+
+        FloatingActionButton(
+            onClick = { counter++ },
+            modifier = Modifier.offset(30.dp, 30.dp)
+        ) {
+            Icon(Icons.Filled.Add, "Floating Action Button.")
+        }
     }
 }

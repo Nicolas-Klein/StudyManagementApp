@@ -1,9 +1,12 @@
 package com.example.studymanagementapp
 
+import android.app.Activity
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
@@ -37,14 +40,33 @@ enum class AppTab {
 }
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             StudyManagementAppTheme {
-                MainAppScreen()
+                Scaffold(
+                    bottomBar = { SharedBottomNavigationBar(currentScreen = NavigationTarget.TIMER)}
+                ) { innerPadding ->
+                    Surface(modifier = Modifier.padding(innerPadding)) {
+                        PomodoroMainScreen()
+                    }
+
+                }
             }
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+    override fun finish() {
+        super.finish()
+
+        overrideActivityTransition(
+            Activity.OVERRIDE_TRANSITION_CLOSE,
+            R.anim.fade_in,
+            R.anim.fade_out
+        )
     }
 }
 
