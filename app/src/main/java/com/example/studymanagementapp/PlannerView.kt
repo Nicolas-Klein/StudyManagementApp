@@ -1,6 +1,8 @@
 package com.example.studymanagementapp
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,15 +10,20 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,6 +48,7 @@ enum class Weekdays {
     SO
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlannerScreen() {
     var selectedTabIndex by remember { mutableStateOf(Tabs.WOCHE) }
@@ -51,7 +59,34 @@ fun PlannerScreen() {
     var taskTitleInput by remember { mutableStateOf("") }
     var deadlineDateInput by remember { mutableStateOf("") }
 
+    var showDatePicker by remember { mutableStateOf(false) }
+    val datePickerState = rememberDatePickerState()
+
     if (showDialog) {
+
+        if (showDatePicker) {
+            DatePickerDialog(
+                onDismissRequest = { showDatePicker = false },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            deadlineDateInput = formatMillisToDateString(datePickerState.selectedDateMillis)
+                            showDatePicker = false
+                        }
+                    ) {
+                        Text("Ok")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showDatePicker = false}) {
+                        Text("Abbrechen")
+                    }
+                }
+            ) {
+                DatePicker(state = datePickerState)
+            }
+        }
+
         AlertDialog(
             onDismissRequest = { showDialog = false },
             title = {
@@ -67,12 +102,30 @@ fun PlannerScreen() {
                     )
 
                     if (selectedTabIndex == Tabs.MONAT) {
-                        OutlinedTextField(
-                            value = deadlineDateInput,
-                            onValueChange = { deadlineDateInput = it },
-                            label = { Text("Fälligkeitsdatum") },
-                            modifier = Modifier.fillMaxWidth()
-                        )
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { showDatePicker = true }
+                        ) {
+                            OutlinedTextField(
+                                value = deadlineDateInput,
+                                onValueChange = {  },
+                                label = { Text("Fälligkeitsdatum") },
+                                readOnly = true,
+                                enabled = false,
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = OutlinedTextFieldDefaults.colors(
+                                    disabledTextColor = MaterialTheme.colorScheme.onSurface,
+                                    disabledBorderColor = MaterialTheme.colorScheme.outline,
+                                    disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+
+                            )
+                        }
+
+
+
                     }
                 }
             },
@@ -147,4 +200,3 @@ fun PlannerScreen() {
 
 
 }
-
