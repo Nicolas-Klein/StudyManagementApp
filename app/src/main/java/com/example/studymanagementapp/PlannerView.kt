@@ -12,7 +12,11 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -25,12 +29,16 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import java.time.LocalDate
 
 
 enum class Tabs {
@@ -51,6 +59,24 @@ enum class Weekdays {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlannerScreen() {
+
+    // ------------------------------ Speicher --------------------------------------
+
+
+    val context = LocalContext.current
+
+    val storageManager = remember { StorageManager(context) }
+
+    var taskList by remember { mutableStateOf(listOf<TaskForDay>()) }
+    var deadlineList by remember { mutableStateOf(listOf<TaskDeadline>()) }
+
+    LaunchedEffect(Unit) { 
+        taskList = storageManager.loadTodoTasks()
+        deadlineList = storageManager.loadDeadlines()
+    }
+
+    // ------------------------------ UI-Elements --------------------------------------
+
     var selectedTabIndex by remember { mutableStateOf(Tabs.WOCHE) }
 
 
@@ -61,6 +87,10 @@ fun PlannerScreen() {
 
     var showDatePicker by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState()
+
+    val dropdownElements = listOf("Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag")
+    var selectedDayInput by remember { mutableStateOf(dropdownElements[0]) }
+    var isDropdownExpanded by remember { mutableStateOf(false) }
 
     if (showDialog) {
 
@@ -101,6 +131,42 @@ fun PlannerScreen() {
                         modifier = Modifier.fillMaxWidth()
                     )
 
+                    if(selectedTabIndex == Tabs.WOCHE) {
+
+                        // add dropdown to select day of the task
+
+                        ExposedDropdownMenuBox(
+                            expanded = isDropdownExpanded,
+                            onExpandedChange = { isDropdownExpanded = !isDropdownExpanded}
+                        ) {
+                            OutlinedTextField(
+                                modifier = Modifier.menuAnchor().fillMaxWidth(),
+                                value = selectedDayInput,
+                                onValueChange = {},
+                                readOnly = true,
+                                label = {Text("Wochentag")},
+                                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isDropdownExpanded) },
+                                colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors()
+                            )
+
+                            ExposedDropdownMenu(
+                                expanded = isDropdownExpanded,
+                                onDismissRequest = { isDropdownExpanded = false }
+                            ) {
+                                dropdownElements.forEach { day ->
+                                    DropdownMenuItem(
+                                        text = { Text(day) },
+                                        onClick = {
+                                            selectedDayInput = day
+                                            isDropdownExpanded = false
+                                        },
+                                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                                    )
+                                }
+                            }
+                        }
+                    }
+
                     if (selectedTabIndex == Tabs.MONAT) {
 
                         Box(
@@ -134,8 +200,19 @@ fun PlannerScreen() {
                     onClick = {
                         if (selectedTabIndex == Tabs.WOCHE){
                             println("Speicher Wochenaufgabe: $taskTitleInput")
+                            
+                            val newTask = TaskForDay(id = taskList.size + 1, title = taskTitleInput, dayOfTask = selectedDayInput)
+
+                            taskList = taskList + newTask
+
+                            storageManager.saveTodoTasks(taskList)
+                            
                         } else {
                             println("Speicher Deadline: $taskTitleInput am $deadlineDateInput")
+
+                            val newDeadline = TaskDeadline(id = deadlineList.size + 1, title = taskTitleInput, dueDate = deadlineDateInput)
+                            deadlineList = deadlineList + newDeadline
+                            storageManager.saveDeadlines(deadlineList)
                         }
 
                         taskTitleInput = ""
@@ -190,13 +267,11 @@ fun PlannerScreen() {
 
 
             when(selectedTabIndex) {
-                Tabs.WOCHE -> WeekView(innerPadding)
-                Tabs.MONAT -> MonthView(innerPadding)
+                Tabs.WOCHE -> WeekView(innerPadding, taskList)
+                Tabs.MONAT -> MonthView(innerPadding, deadlineList)
             }
         }
 
     }
-
-
 
 }
