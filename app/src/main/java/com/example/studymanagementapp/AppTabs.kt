@@ -25,17 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.awaitCancellation
 
-
-@Composable
-fun PlaceholderSettings() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = androidx.compose.ui.Alignment.Center
-    ) {
-        Text("Hier entsteht Einstellungen!", style = MaterialTheme.typography.headlineMedium)
-    }
-}
-
 @Composable
 fun PomodoroMainScreen() {
     var currentScreen by remember { mutableStateOf(PomodoroState.FOCUS) }
