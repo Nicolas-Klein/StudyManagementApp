@@ -11,8 +11,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -35,7 +39,7 @@ data class TaskDeadline(
 )
 
 @Composable
-fun MonthView(innerPadding: PaddingValues, deadlineList: List<TaskDeadline>) {
+fun MonthView(innerPadding: PaddingValues, deadlineList: List<TaskDeadline>, onDeleteDeadlineClick: (TaskDeadline) -> Unit) {
 
     println("DeadlineList size: " + deadlineList.size)
 
@@ -58,7 +62,7 @@ fun MonthView(innerPadding: PaddingValues, deadlineList: List<TaskDeadline>) {
             modifier = Modifier.fillMaxSize(),
         ) {
             items(sortedDeadlines, key = { it.id }) { deadline ->
-                DeadlineCard(deadline = deadline)
+                DeadlineCard(deadline = deadline, onDeleteDeadline = onDeleteDeadlineClick)
             }
         }
 
@@ -69,7 +73,7 @@ fun MonthView(innerPadding: PaddingValues, deadlineList: List<TaskDeadline>) {
 }
 
 @Composable
-fun DeadlineCard(deadline: TaskDeadline) {
+fun DeadlineCard(deadline: TaskDeadline, onDeleteDeadline: (TaskDeadline) -> Unit) {
     val today = LocalDate.now()
 
     val dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy")
@@ -129,6 +133,15 @@ fun DeadlineCard(deadline: TaskDeadline) {
                     style = MaterialTheme.typography.labelMedium,
                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                     color = contentColorFor(badgeColor)
+                )
+
+            }
+
+            IconButton(onClick = { onDeleteDeadline(deadline) }) {
+                Icon(
+                    imageVector = Icons.Filled.Delete,
+                    contentDescription = "Aufgabe löschen",
+                    tint = MaterialTheme.colorScheme.error
                 )
             }
         }

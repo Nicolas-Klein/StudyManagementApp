@@ -262,8 +262,16 @@ fun PlannerScreen() {
 
 
             when(selectedTabIndex) {
-                Tabs.WOCHE -> WeekView(innerPadding, taskList)
-                Tabs.MONAT -> MonthView(innerPadding, deadlineList)
+                Tabs.WOCHE -> WeekView(innerPadding, taskList, onDeleteTaskClick = { taskToDelete ->
+                    taskList = taskList.filter { it.id != taskToDelete.id }
+
+                    storageManager.saveTodoTasks(taskList)
+                })
+                Tabs.MONAT -> MonthView(innerPadding, deadlineList, onDeleteDeadlineClick = { deadlineToDelete ->
+                    deadlineList = deadlineList.filter { it.id != deadlineToDelete.id }
+
+                    storageManager.saveDeadlines(deadlineList)
+                })
             }
         }
 

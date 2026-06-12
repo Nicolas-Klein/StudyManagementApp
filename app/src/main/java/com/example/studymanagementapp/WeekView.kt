@@ -38,7 +38,7 @@ data class TaskForDay(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WeekView(innerPadding: PaddingValues, taskList: List<TaskForDay>) {
+fun WeekView(innerPadding: PaddingValues, taskList: List<TaskForDay>, onDeleteTaskClick: (TaskForDay) -> Unit) {
 
     println("TaskList size: " + taskList.size)
 
@@ -58,7 +58,6 @@ fun WeekView(innerPadding: PaddingValues, taskList: List<TaskForDay>) {
         modifier = Modifier
             .fillMaxSize()
             .padding(innerPadding)
-
     ) {
         var state by remember { mutableStateOf(weekday) }
         Column {
@@ -73,20 +72,20 @@ fun WeekView(innerPadding: PaddingValues, taskList: List<TaskForDay>) {
             }
 
             when(state) {
-                Weekdays.MO -> WeekdayTaskCard("Montag", taskList)
-                Weekdays.DI -> WeekdayTaskCard("Dienstag", taskList)
-                Weekdays.MI -> WeekdayTaskCard("Mittwoch", taskList)
-                Weekdays.DO -> WeekdayTaskCard("Donnerstag", taskList)
-                Weekdays.FR -> WeekdayTaskCard("Freitag", taskList)
-                Weekdays.SA -> WeekdayTaskCard("Samstag", taskList)
-                Weekdays.SO -> WeekdayTaskCard("Sonntag", taskList)
+                Weekdays.MO -> WeekdayTaskCard("Montag", taskList, onDeleteTask = onDeleteTaskClick)
+                Weekdays.DI -> WeekdayTaskCard("Dienstag", taskList, onDeleteTask = onDeleteTaskClick)
+                Weekdays.MI -> WeekdayTaskCard("Mittwoch", taskList, onDeleteTask = onDeleteTaskClick)
+                Weekdays.DO -> WeekdayTaskCard("Donnerstag", taskList, onDeleteTask = onDeleteTaskClick)
+                Weekdays.FR -> WeekdayTaskCard("Freitag", taskList, onDeleteTask = onDeleteTaskClick)
+                Weekdays.SA -> WeekdayTaskCard("Samstag", taskList, onDeleteTask = onDeleteTaskClick)
+                Weekdays.SO -> WeekdayTaskCard("Sonntag", taskList, onDeleteTask = onDeleteTaskClick)
             }
         }
     }
 }
 
 @Composable
-fun WeekdayTaskCard(weekday: String, taskList: List<TaskForDay>) {
+fun WeekdayTaskCard(weekday: String, taskList: List<TaskForDay>, onDeleteTask: (TaskForDay) -> Unit) {
 
     for (i in taskList) {
         println(i.toString())
@@ -134,7 +133,7 @@ fun WeekdayTaskCard(weekday: String, taskList: List<TaskForDay>) {
                             modifier = Modifier.weight(1f)
                         )
 
-                        IconButton(onClick = { /*Delete Tast*/ }) {
+                        IconButton(onClick = { onDeleteTask(task) }) {
                             Icon(
                                 imageVector = Icons.Filled.Delete,
                                 contentDescription = "Aufgabe löschen",
