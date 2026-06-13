@@ -8,11 +8,17 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.Modifier
 import com.example.studymanagementapp.ui.components.NavigationTarget
 import com.example.studymanagementapp.ui.components.SharedBottomNavigationBar
+import com.example.studymanagementapp.ui.components.SharedTopBar
 import com.example.studymanagementapp.ui.screens.PomodoroMainScreen
 import com.example.studymanagementapp.ui.theme.StudyManagementAppTheme
 
@@ -23,6 +29,7 @@ enum class PomodoroState {
 }
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3Api::class)
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +37,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             StudyManagementAppTheme {
                 Scaffold(
-                    bottomBar = { SharedBottomNavigationBar(currentScreen = NavigationTarget.TIMER) }
+                    bottomBar = { SharedBottomNavigationBar(currentScreen = NavigationTarget.TIMER) },
+                    topBar = { SharedTopBar("Focus-Timer") }
                 ) { innerPadding ->
                     Surface(modifier = Modifier.padding(innerPadding)) {
                         PomodoroMainScreen()

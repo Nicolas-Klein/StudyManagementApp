@@ -238,7 +238,6 @@ fun PlannerScreen() {
         )
     }
 
-
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
