@@ -11,6 +11,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import com.example.studymanagementapp.ui.components.NavigationTarget
+import com.example.studymanagementapp.ui.components.SharedBottomNavigationBar
+import com.example.studymanagementapp.ui.screens.PomodoroMainScreen
 import com.example.studymanagementapp.ui.theme.StudyManagementAppTheme
 
 enum class PomodoroState {
@@ -27,7 +30,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             StudyManagementAppTheme {
                 Scaffold(
-                    bottomBar = { SharedBottomNavigationBar(currentScreen = NavigationTarget.TIMER)}
+                    bottomBar = { SharedBottomNavigationBar(currentScreen = NavigationTarget.TIMER) }
                 ) { innerPadding ->
                     Surface(modifier = Modifier.padding(innerPadding)) {
                         PomodoroMainScreen()

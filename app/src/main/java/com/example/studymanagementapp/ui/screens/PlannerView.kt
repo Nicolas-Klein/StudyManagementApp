@@ -1,4 +1,4 @@
-package com.example.studymanagementapp
+package com.example.studymanagementapp.ui.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -37,6 +37,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.example.studymanagementapp.storage.StorageManager
+import com.example.studymanagementapp.utils.formatMillisToDateString
+import com.example.studymanagementapp.data.TaskForDay
+import com.example.studymanagementapp.data.TaskDeadline
 
 
 enum class Tabs {
@@ -58,8 +62,7 @@ enum class Weekdays {
 @Composable
 fun PlannerScreen() {
 
-    // ------------------------------ Speicher --------------------------------------
-
+    // ------------------------------ Storage-Manager --------------------------------------
 
     val context = LocalContext.current
 
@@ -98,7 +101,8 @@ fun PlannerScreen() {
                 confirmButton = {
                     TextButton(
                         onClick = {
-                            deadlineDateInput = formatMillisToDateString(datePickerState.selectedDateMillis)
+                            deadlineDateInput =
+                                formatMillisToDateString(datePickerState.selectedDateMillis)
                             showDatePicker = false
                         }
                     ) {
@@ -196,7 +200,11 @@ fun PlannerScreen() {
                         if (selectedTabIndex == Tabs.WOCHE){
                             println("Speicher Wochenaufgabe: $taskTitleInput")
                             
-                            val newTask = TaskForDay(id = taskList.size + 1, title = taskTitleInput, dayOfTask = selectedDayInput)
+                            val newTask = TaskForDay(
+                                id = taskList.size + 1,
+                                title = taskTitleInput,
+                                dayOfTask = selectedDayInput
+                            )
 
                             taskList = taskList + newTask
 
@@ -205,7 +213,11 @@ fun PlannerScreen() {
                         } else {
                             println("Speicher Deadline: $taskTitleInput am $deadlineDateInput")
 
-                            val newDeadline = TaskDeadline(id = deadlineList.size + 1, title = taskTitleInput, dueDate = deadlineDateInput)
+                            val newDeadline = TaskDeadline(
+                                id = deadlineList.size + 1,
+                                title = taskTitleInput,
+                                dueDate = deadlineDateInput
+                            )
                             deadlineList = deadlineList + newDeadline
                             storageManager.saveDeadlines(deadlineList)
                         }
@@ -257,24 +269,22 @@ fun PlannerScreen() {
         }
 
     ) { innerPadding ->
-
         Column(modifier = Modifier.fillMaxSize()) {
-
-
             when(selectedTabIndex) {
                 Tabs.WOCHE -> WeekView(innerPadding, taskList, onDeleteTaskClick = { taskToDelete ->
                     taskList = taskList.filter { it.id != taskToDelete.id }
 
                     storageManager.saveTodoTasks(taskList)
                 })
-                Tabs.MONAT -> MonthView(innerPadding, deadlineList, onDeleteDeadlineClick = { deadlineToDelete ->
-                    deadlineList = deadlineList.filter { it.id != deadlineToDelete.id }
+                Tabs.MONAT -> MonthView(
+                    innerPadding,
+                    deadlineList,
+                    onDeleteDeadlineClick = { deadlineToDelete ->
+                        deadlineList = deadlineList.filter { it.id != deadlineToDelete.id }
 
-                    storageManager.saveDeadlines(deadlineList)
-                })
+                        storageManager.saveDeadlines(deadlineList)
+                    })
             }
         }
-
     }
-
 }

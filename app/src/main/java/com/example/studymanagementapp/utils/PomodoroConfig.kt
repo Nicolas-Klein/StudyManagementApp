@@ -1,4 +1,4 @@
-package com.example.studymanagementapp
+package com.example.studymanagementapp.utils
 
 object PomodoroConfig {
     const val FOCUS_TIME = 25 * 60 * 1000L

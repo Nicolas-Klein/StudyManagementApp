@@ -1,6 +1,9 @@
-package com.example.studymanagementapp
+package com.example.studymanagementapp.storage
 
 import android.content.Context
+import com.example.studymanagementapp.data.TaskDeadline
+import com.example.studymanagementapp.data.TaskForDay
+
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 

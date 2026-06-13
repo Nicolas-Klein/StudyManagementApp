@@ -1,4 +1,4 @@
-package com.example.studymanagementapp
+package com.example.studymanagementapp.ui.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme

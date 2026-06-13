@@ -10,6 +10,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import com.example.studymanagementapp.ui.components.NavigationTarget
+import com.example.studymanagementapp.ui.components.SharedBottomNavigationBar
+import com.example.studymanagementapp.ui.screens.PlannerScreen
 
 class PlannerActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)

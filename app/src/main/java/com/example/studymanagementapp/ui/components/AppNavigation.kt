@@ -1,5 +1,6 @@
-package com.example.studymanagementapp
+package com.example.studymanagementapp.ui.components
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -12,6 +13,9 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import com.example.studymanagementapp.MainActivity
+import com.example.studymanagementapp.PlannerActivity
+import com.example.studymanagementapp.R
 
 enum class NavigationTarget {
     TIMER,
@@ -34,9 +38,9 @@ fun SharedBottomNavigationBar(currentScreen: NavigationTarget) {
                     intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
                     context.startActivity(intent)
 
-                    if (context is android.app.Activity) {
+                    if (context is Activity) {
                         context.overrideActivityTransition(
-                            android.app.Activity.OVERRIDE_TRANSITION_OPEN,
+                            Activity.OVERRIDE_TRANSITION_OPEN,
                             R.anim.fade_in,
                             R.anim.fade_out
                         )
@@ -55,9 +59,9 @@ fun SharedBottomNavigationBar(currentScreen: NavigationTarget) {
                     intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
                     context.startActivity(intent)
 
-                    if (context is android.app.Activity) {
+                    if (context is Activity) {
                         context.overrideActivityTransition(
-                            android.app.Activity.OVERRIDE_TRANSITION_OPEN,
+                            Activity.OVERRIDE_TRANSITION_OPEN,
                             R.anim.fade_in,
                             R.anim.fade_out
                         )
