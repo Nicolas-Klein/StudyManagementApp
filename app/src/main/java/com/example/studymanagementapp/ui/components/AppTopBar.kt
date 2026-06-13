@@ -16,7 +16,7 @@ fun SharedTopBar(screen: String) {
             titleContentColor = MaterialTheme.colorScheme.primary,
         ),
         title = {
-            Text("Lernplaner")
+            Text(screen)
         }
     )
 }
