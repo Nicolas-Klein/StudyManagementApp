@@ -12,6 +12,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -41,11 +42,12 @@ import com.example.studymanagementapp.storage.StorageManager
 import com.example.studymanagementapp.utils.formatMillisToDateString
 import com.example.studymanagementapp.data.TaskForDay
 import com.example.studymanagementapp.data.TaskDeadline
+import kotlin.collections.plus
 
 
 enum class Tabs {
     WOCHE,
-    MONAT
+    DEADLINE
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -81,32 +83,15 @@ fun PlannerScreen() {
 
     val dropdownElements = listOf("Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag")
     var selectedDayInput by remember { mutableStateOf(dropdownElements[0]) }
-    var isDropdownExpanded by remember { mutableStateOf(false) }
 
     if (showDialog) {
 
-        if (showDatePicker) {
-            DatePickerDialog(
-                onDismissRequest = { showDatePicker = false },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            deadlineDateInput =
-                                formatMillisToDateString(datePickerState.selectedDateMillis)
-                            showDatePicker = false
-                        }
-                    ) {
-                        Text("Ok")
-                    }
-                },
-                dismissButton = {
-                    TextButton(onClick = { showDatePicker = false}) {
-                        Text("Abbrechen")
-                    }
-                }
-            ) {
-                DatePicker(state = datePickerState)
-            }
+        if(showDatePicker) {
+            ShowDatePicker(
+                state = datePickerState,
+                onDateSelected = {deadlineDateInput = it},
+                onDismiss = {showDatePicker = false }
+            )
         }
 
         AlertDialog(
@@ -123,74 +108,27 @@ fun PlannerScreen() {
                         modifier = Modifier.fillMaxWidth()
                     )
 
-                    if(selectedTabIndex == Tabs.WOCHE) {
-                        ExposedDropdownMenuBox(
-                            expanded = isDropdownExpanded,
-                            onExpandedChange = { isDropdownExpanded = !isDropdownExpanded}
-                        ) {
-                            OutlinedTextField(
-                                modifier = Modifier.menuAnchor(type = MenuAnchorType.PrimaryNotEditable).fillMaxWidth(),
-                                value = selectedDayInput,
-                                onValueChange = {},
-                                readOnly = true,
-                                label = {Text("Wochentag")},
-                                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isDropdownExpanded) },
-                                colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors()
-                            )
 
-                            ExposedDropdownMenu(
-                                expanded = isDropdownExpanded,
-                                onDismissRequest = { isDropdownExpanded = false }
-                            ) {
-                                dropdownElements.forEach { day ->
-                                    DropdownMenuItem(
-                                        text = { Text(day) },
-                                        onClick = {
-                                            selectedDayInput = day
-                                            isDropdownExpanded = false
-                                        },
-                                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
-                                    )
-                                }
-                            }
-                        }
+                    when(selectedTabIndex){
+                        Tabs.WOCHE -> WeekDayDropdown(
+                            selectedDay = selectedDayInput,
+                            onDaySelected = { selectedDayInput = it },
+                            dropdownElements = dropdownElements
+                        )
+                        Tabs.DEADLINE -> DeadlineDatePicker(
+                            currentDateText = deadlineDateInput,
+                            onClick = { showDatePicker = true }
+                        )
                     }
 
-                    if (selectedTabIndex == Tabs.MONAT) {
-
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable { showDatePicker = true }
-                        ) {
-                            OutlinedTextField(
-                                value = deadlineDateInput,
-                                onValueChange = {  },
-                                label = { Text("Fälligkeitsdatum") },
-                                readOnly = true,
-                                enabled = false,
-                                modifier = Modifier.fillMaxWidth(),
-                                colors = OutlinedTextFieldDefaults.colors(
-                                    disabledTextColor = MaterialTheme.colorScheme.onSurface,
-                                    disabledBorderColor = MaterialTheme.colorScheme.outline,
-                                    disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-
-                            )
-                        }
-
-
-
-                    }
                 }
             },
             confirmButton = {
                 Button(
                     onClick = {
                         if (selectedTabIndex == Tabs.WOCHE){
-                            println("Speicher Wochenaufgabe: $taskTitleInput")
                             val highestId = taskList.maxOfOrNull { it.id } ?: 0
-                            
+
                             val newTask = TaskForDay(
                                 id = highestId + 1,
                                 title = taskTitleInput,
@@ -200,9 +138,8 @@ fun PlannerScreen() {
                             taskList = taskList + newTask
 
                             storageManager.saveTodoTasks(taskList)
-                            
+
                         } else {
-                            println("Speicher Deadline: $taskTitleInput am $deadlineDateInput")
                             val highestId = deadlineList.maxOfOrNull { it.id } ?: 0
 
                             val newDeadline = TaskDeadline(
@@ -234,11 +171,6 @@ fun PlannerScreen() {
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    when (selectedTabIndex){
-                        Tabs.WOCHE -> println("Woche")
-                        Tabs.MONAT -> println("Monat")
-                    }
-
                     showDialog = true
                 },
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -267,7 +199,7 @@ fun PlannerScreen() {
 
                     storageManager.saveTodoTasks(taskList)
                 })
-                Tabs.MONAT -> MonthView(
+                Tabs.DEADLINE -> DeadlineView(
                     innerPadding,
                     deadlineList,
                     onDeleteDeadlineClick = { deadlineToDelete ->
@@ -277,5 +209,94 @@ fun PlannerScreen() {
                     })
             }
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ShowDatePicker(state: DatePickerState, onDateSelected: (String) -> Unit, onDismiss: () -> Unit) {
+
+    DatePickerDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onDateSelected(formatMillisToDateString(state.selectedDateMillis))
+                    onDismiss()
+                }
+            ) {
+                Text("Ok")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Abbrechen")
+            }
+        }
+    ) {
+        DatePicker(state = state)
+    }
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun WeekDayDropdown(selectedDay: String, onDaySelected: (String) -> Unit, dropdownElements: List<String>){
+
+    var isDropdownExpanded by remember { mutableStateOf(false) }
+
+    ExposedDropdownMenuBox(
+        expanded = isDropdownExpanded,
+        onExpandedChange = { isDropdownExpanded = !isDropdownExpanded}
+    ) {
+        OutlinedTextField(
+            modifier = Modifier.menuAnchor(type = MenuAnchorType.PrimaryNotEditable).fillMaxWidth(),
+            value = selectedDay,
+            onValueChange = {},
+            readOnly = true,
+            label = {Text("Wochentag")},
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isDropdownExpanded) },
+            colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors()
+        )
+
+        ExposedDropdownMenu(
+            expanded = isDropdownExpanded,
+            onDismissRequest = { isDropdownExpanded = false }
+        ) {
+            dropdownElements.forEach { day ->
+                DropdownMenuItem(
+                    text = { Text(day) },
+                    onClick = {
+                        onDaySelected(day)
+                        isDropdownExpanded = false
+                    },
+                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun DeadlineDatePicker(currentDateText: String, onClick: () -> Unit){
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() }
+    ) {
+        OutlinedTextField(
+            value = currentDateText,
+            onValueChange = {  },
+            label = { Text("Fälligkeitsdatum") },
+            readOnly = true,
+            enabled = false,
+            modifier = Modifier.fillMaxWidth(),
+            colors = OutlinedTextFieldDefaults.colors(
+                disabledTextColor = MaterialTheme.colorScheme.onSurface,
+                disabledBorderColor = MaterialTheme.colorScheme.outline,
+                disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+
+        )
     }
 }

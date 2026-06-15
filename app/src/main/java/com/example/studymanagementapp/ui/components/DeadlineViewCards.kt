@@ -25,7 +25,7 @@ import com.example.studymanagementapp.data.TaskDeadline
 import com.example.studymanagementapp.utils.calculateDaysRemaining
 
 @Composable
-fun MonthviewCard(deadline: TaskDeadline, onDeleteDeadline: (TaskDeadline) -> Unit) {
+fun DeadlineViewCard(deadline: TaskDeadline, onDeleteDeadline: (TaskDeadline) -> Unit) {
 
     val daysRemaining = calculateDaysRemaining(deadline.dueDate)
 

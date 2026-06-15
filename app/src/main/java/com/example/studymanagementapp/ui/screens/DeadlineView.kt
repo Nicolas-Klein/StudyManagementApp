@@ -14,12 +14,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.studymanagementapp.data.TaskDeadline
-import com.example.studymanagementapp.ui.components.MonthviewCard
+import com.example.studymanagementapp.ui.components.DeadlineViewCard
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun MonthView(innerPadding: PaddingValues, deadlineList: List<TaskDeadline>, onDeleteDeadlineClick: (TaskDeadline) -> Unit) {
+fun DeadlineView(innerPadding: PaddingValues, deadlineList: List<TaskDeadline>, onDeleteDeadlineClick: (TaskDeadline) -> Unit) {
 
     val sortedDeadlines = remember(deadlineList) {
 
@@ -57,7 +57,7 @@ fun MonthView(innerPadding: PaddingValues, deadlineList: List<TaskDeadline>, onD
             modifier = Modifier.fillMaxSize(),
         ) {
             items(sortedDeadlines, key = { it.id }) { deadline ->
-                MonthviewCard(deadline = deadline, onDeleteDeadline = onDeleteDeadlineClick)
+                DeadlineViewCard(deadline = deadline, onDeleteDeadline = onDeleteDeadlineClick)
             }
         }
 
