@@ -21,7 +21,15 @@ import com.example.studymanagementapp.ui.components.WeekviewCards
 import java.time.DayOfWeek
 import java.time.LocalDate
 
-
+enum class Weekdays {
+    MO,
+    DI,
+    MI,
+    DO,
+    FR,
+    SA,
+    SO
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

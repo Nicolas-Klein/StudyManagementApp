@@ -1,6 +1,5 @@
 package com.example.studymanagementapp
 
-import android.app.Activity
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -9,14 +8,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.Modifier
-import com.example.studymanagementapp.ui.components.NavigationTarget
+import com.example.studymanagementapp.data.NavigationTarget
 import com.example.studymanagementapp.ui.components.SharedBottomNavigationBar
 import com.example.studymanagementapp.ui.components.SharedTopBar
 import com.example.studymanagementapp.ui.screens.PlannerScreen
@@ -47,7 +42,7 @@ class PlannerActivity : ComponentActivity() {
         super.finish()
 
         overrideActivityTransition(
-            Activity.OVERRIDE_TRANSITION_CLOSE,
+            OVERRIDE_TRANSITION_CLOSE,
             R.anim.fade_in,
             R.anim.fade_out
         )

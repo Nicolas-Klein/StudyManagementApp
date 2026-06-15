@@ -23,12 +23,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.studymanagementapp.utils.PomodoroConfig
-import com.example.studymanagementapp.PomodoroState
 import com.example.studymanagementapp.ui.components.LearningTimerView
 import com.example.studymanagementapp.ui.components.LongBreakTimerView
 import com.example.studymanagementapp.ui.components.ShortBreakTimerView
 import com.example.studymanagementapp.utils.formatTime
 import kotlinx.coroutines.awaitCancellation
+
+enum class PomodoroState {
+    FOCUS,
+    SHORT_BREAK,
+    LONG_BREAK
+}
 
 @Composable
 fun PomodoroMainScreen() {

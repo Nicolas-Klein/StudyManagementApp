@@ -48,16 +48,6 @@ enum class Tabs {
     MONAT
 }
 
-enum class Weekdays {
-    MO,
-    DI,
-    MI,
-    DO,
-    FR,
-    SA,
-    SO
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlannerScreen() {
@@ -199,9 +189,10 @@ fun PlannerScreen() {
                     onClick = {
                         if (selectedTabIndex == Tabs.WOCHE){
                             println("Speicher Wochenaufgabe: $taskTitleInput")
+                            val highestId = taskList.maxOfOrNull { it.id } ?: 0
                             
                             val newTask = TaskForDay(
-                                id = taskList.size + 1,
+                                id = highestId + 1,
                                 title = taskTitleInput,
                                 dayOfTask = selectedDayInput
                             )
@@ -212,9 +203,10 @@ fun PlannerScreen() {
                             
                         } else {
                             println("Speicher Deadline: $taskTitleInput am $deadlineDateInput")
+                            val highestId = deadlineList.maxOfOrNull { it.id } ?: 0
 
                             val newDeadline = TaskDeadline(
-                                id = deadlineList.size + 1,
+                                id = highestId + 1,
                                 title = taskTitleInput,
                                 dueDate = deadlineDateInput
                             )

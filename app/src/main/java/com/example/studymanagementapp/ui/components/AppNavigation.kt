@@ -16,11 +16,8 @@ import androidx.compose.ui.platform.LocalContext
 import com.example.studymanagementapp.MainActivity
 import com.example.studymanagementapp.PlannerActivity
 import com.example.studymanagementapp.R
+import com.example.studymanagementapp.data.NavigationTarget
 
-enum class NavigationTarget {
-    TIMER,
-    PLANNER
-}
 
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 @Composable
