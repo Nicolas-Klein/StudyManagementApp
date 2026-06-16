@@ -80,15 +80,17 @@ fun PomodoroMainScreen() {
     }
 
     Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxSize().padding(24.dp),
+        verticalArrangement = Arrangement.SpaceAround,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = "Abgeschlossene Fokus-Phasen: $focusCycleCount",
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(top = 50.dp)
+            modifier = Modifier.padding(top = 5.dp)
         )
+
+        Spacer(modifier = Modifier.height(32.dp))
 
         val viewModifier = Modifier.weight(1f).fillMaxWidth()
         val formattedTime = formatTime(timeLeftInMillis)
@@ -99,6 +101,12 @@ fun PomodoroMainScreen() {
             PomodoroState.SHORT_BREAK -> ShortBreakTimerView(formattedTime, modifier = viewModifier)
             PomodoroState.LONG_BREAK -> LongBreakTimerView(formattedTime, modifier = viewModifier)
         }
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        Text(
+            text = "Deadline: test"
+        )
 
         Spacer(modifier = Modifier.height(32.dp))
 
