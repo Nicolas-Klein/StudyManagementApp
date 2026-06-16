@@ -23,11 +23,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.studymanagementapp.data.TaskDeadline
 import com.example.studymanagementapp.utils.calculateDaysRemaining
+import java.time.LocalDate
 
 @Composable
 fun DeadlineViewCard(deadline: TaskDeadline, onDeleteDeadline: (TaskDeadline) -> Unit) {
 
-    val daysRemaining = calculateDaysRemaining(deadline.dueDate)
+    val daysRemaining = calculateDaysRemaining(deadline.dueDate, LocalDate.now().toString())
 
     val badgeColor = when {
         daysRemaining < 0 -> MaterialTheme.colorScheme.error

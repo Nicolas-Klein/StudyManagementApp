@@ -16,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.example.studymanagementapp.data.TaskDeadline
 import com.example.studymanagementapp.data.TaskForDay
 import com.example.studymanagementapp.ui.components.WeekviewCards
 import java.time.DayOfWeek
@@ -33,7 +34,7 @@ enum class Weekdays {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WeekView(innerPadding: PaddingValues, taskList: List<TaskForDay>, onDeleteTaskClick: (TaskForDay) -> Unit) {
+fun WeekView(innerPadding: PaddingValues, taskList: List<TaskForDay>, deadlineList: List<TaskDeadline>, onDeleteTaskClick: (TaskForDay) -> Unit, onSelectTaskClick: (TaskForDay) -> Unit) {
 
     println("TaskList size: " + taskList.size)
 
@@ -67,13 +68,13 @@ fun WeekView(innerPadding: PaddingValues, taskList: List<TaskForDay>, onDeleteTa
             }
 
             when(state) {
-                Weekdays.MO -> WeekviewCards("Montag", taskList, onDeleteTask = onDeleteTaskClick)
-                Weekdays.DI -> WeekviewCards("Dienstag", taskList, onDeleteTask = onDeleteTaskClick)
-                Weekdays.MI -> WeekviewCards("Mittwoch", taskList, onDeleteTask = onDeleteTaskClick)
-                Weekdays.DO -> WeekviewCards("Donnerstag", taskList, onDeleteTask = onDeleteTaskClick)
-                Weekdays.FR -> WeekviewCards("Freitag", taskList, onDeleteTask = onDeleteTaskClick)
-                Weekdays.SA -> WeekviewCards("Samstag", taskList, onDeleteTask = onDeleteTaskClick)
-                Weekdays.SO -> WeekviewCards("Sonntag", taskList, onDeleteTask = onDeleteTaskClick)
+                Weekdays.MO -> WeekviewCards("Montag", taskList, deadlineList,  onDeleteTask = onDeleteTaskClick, onSelectTask = onSelectTaskClick)
+                Weekdays.DI -> WeekviewCards("Dienstag", taskList, deadlineList, onDeleteTask = onDeleteTaskClick, onSelectTask = onSelectTaskClick)
+                Weekdays.MI -> WeekviewCards("Mittwoch", taskList, deadlineList, onDeleteTask = onDeleteTaskClick, onSelectTask = onSelectTaskClick)
+                Weekdays.DO -> WeekviewCards("Donnerstag", taskList, deadlineList, onDeleteTask = onDeleteTaskClick, onSelectTask = onSelectTaskClick)
+                Weekdays.FR -> WeekviewCards("Freitag", taskList, deadlineList, onDeleteTask = onDeleteTaskClick, onSelectTask = onSelectTaskClick)
+                Weekdays.SA -> WeekviewCards("Samstag", taskList, deadlineList, onDeleteTask = onDeleteTaskClick, onSelectTask = onSelectTaskClick)
+                Weekdays.SO -> WeekviewCards("Sonntag", taskList, deadlineList, onDeleteTask = onDeleteTaskClick, onSelectTask = onSelectTaskClick)
             }
         }
     }

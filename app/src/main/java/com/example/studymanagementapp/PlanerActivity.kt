@@ -14,10 +14,10 @@ import androidx.compose.ui.Modifier
 import com.example.studymanagementapp.data.NavigationTarget
 import com.example.studymanagementapp.ui.components.SharedBottomNavigationBar
 import com.example.studymanagementapp.ui.components.SharedTopBar
-import com.example.studymanagementapp.ui.screens.PlannerScreen
+import com.example.studymanagementapp.ui.screens.PlanerScreen
 import com.example.studymanagementapp.ui.theme.StudyManagementAppTheme
 
-class PlannerActivity : ComponentActivity() {
+class PlanerActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +30,7 @@ class PlannerActivity : ComponentActivity() {
                     topBar = { SharedTopBar("Lernplaner") }
                 ) { innerPadding ->
                     Surface(modifier = Modifier.padding(innerPadding)) {
-                        PlannerScreen()
+                        PlanerScreen()
                     }
                 }
             }

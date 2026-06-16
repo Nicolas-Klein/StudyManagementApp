@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircleOutline
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -14,14 +15,16 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.studymanagementapp.data.TaskDeadline
 import com.example.studymanagementapp.data.TaskForDay
 import com.example.studymanagementapp.utils.filterTasksByDay
 
 @Composable
-fun WeekviewCards(weekday: String, taskList: List<TaskForDay>, onDeleteTask: (TaskForDay) -> Unit) {
+fun WeekviewCards(weekday: String, taskList: List<TaskForDay>, deadlineList: List<TaskDeadline>, onDeleteTask: (TaskForDay) -> Unit, onSelectTask: (TaskForDay) -> Unit) {
 
     val tasksForThisDay = filterTasksByDay(taskList, weekday)
 
@@ -46,6 +49,11 @@ fun WeekviewCards(weekday: String, taskList: List<TaskForDay>, onDeleteTask: (Ta
             )
         } else {
             tasksForThisDay.forEach { task ->
+
+                val linkedDeadline = remember(task.linkedDeadline, deadlineList) {
+                    deadlineList.find { it.id == task.linkedDeadline }
+                }
+
                 Card(
                     modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
                     colors = CardDefaults.cardColors(
@@ -59,11 +67,28 @@ fun WeekviewCards(weekday: String, taskList: List<TaskForDay>, onDeleteTask: (Ta
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
+
                         Text(
                             text = task.title,
                             style = MaterialTheme.typography.bodyLarge,
                             modifier = Modifier.weight(1f)
                         )
+
+                        task.linkedDeadline?.let {
+                            Text(
+                                text = linkedDeadline?.title ?: "",
+                                style = MaterialTheme.typography.bodySmall,
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+
+                        IconButton(onClick = { onSelectTask(task) }) {
+                            Icon(
+                                imageVector = Icons.Filled.AddCircleOutline,
+                                contentDescription = "Aufgabe auswählen",
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
 
                         IconButton(onClick = { onDeleteTask(task) }) {
                             Icon(

@@ -14,7 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import com.example.studymanagementapp.MainActivity
-import com.example.studymanagementapp.PlannerActivity
+import com.example.studymanagementapp.PlanerActivity
 import com.example.studymanagementapp.R
 import com.example.studymanagementapp.data.NavigationTarget
 
@@ -52,7 +52,7 @@ fun SharedBottomNavigationBar(currentScreen: NavigationTarget) {
             icon = { Icon(Icons.Filled.DateRange, contentDescription = "Planner") },
             onClick = {
                 if (currentScreen != NavigationTarget.PLANNER) {
-                    val intent = Intent(context, PlannerActivity::class.java)
+                    val intent = Intent(context, PlanerActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
                     context.startActivity(intent)
 

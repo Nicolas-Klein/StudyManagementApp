@@ -1,5 +1,6 @@
 package com.example.studymanagementapp.ui.screens
 
+import android.content.Intent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,17 +33,18 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.example.studymanagementapp.MainActivity
 import com.example.studymanagementapp.storage.StorageManager
 import com.example.studymanagementapp.utils.formatMillisToDateString
 import com.example.studymanagementapp.data.TaskForDay
 import com.example.studymanagementapp.data.TaskDeadline
 import kotlin.collections.plus
+import androidx.compose.runtime.mutableStateOf
 
 
 enum class Tabs {
@@ -52,7 +54,7 @@ enum class Tabs {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PlannerScreen() {
+fun PlanerScreen() {
 
     // ------------------------------ Storage-Manager --------------------------------------
 
@@ -83,6 +85,7 @@ fun PlannerScreen() {
 
     val dropdownElements = listOf("Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag")
     var selectedDayInput by remember { mutableStateOf(dropdownElements[0]) }
+    var selectedDeadlineInput: Int? by remember { mutableStateOf(0) }
 
     if (showDialog) {
 
@@ -110,11 +113,19 @@ fun PlannerScreen() {
 
 
                     when(selectedTabIndex){
-                        Tabs.WOCHE -> WeekDayDropdown(
+                        Tabs.WOCHE -> {
+                            WeekDayDropdown(
                             selectedDay = selectedDayInput,
                             onDaySelected = { selectedDayInput = it },
                             dropdownElements = dropdownElements
-                        )
+                            )
+                            DeadlineDropDown(
+                                dropdownElements = deadlineList,
+                                onDeadlineSelected = { selectedDeadlineInput = it},
+                            )
+
+                            println("Deadline Id: $selectedDeadlineInput")
+                        }
                         Tabs.DEADLINE -> DeadlineDatePicker(
                             currentDateText = deadlineDateInput,
                             onClick = { showDatePicker = true }
@@ -132,7 +143,8 @@ fun PlannerScreen() {
                             val newTask = TaskForDay(
                                 id = highestId + 1,
                                 title = taskTitleInput,
-                                dayOfTask = selectedDayInput
+                                dayOfTask = selectedDayInput,
+                                linkedDeadline = selectedDeadlineInput,
                             )
 
                             taskList = taskList + newTask
@@ -194,11 +206,24 @@ fun PlannerScreen() {
     ) { innerPadding ->
         Column(modifier = Modifier.fillMaxSize()) {
             when(selectedTabIndex) {
-                Tabs.WOCHE -> WeekView(innerPadding, taskList, onDeleteTaskClick = { taskToDelete ->
-                    taskList = taskList.filter { it.id != taskToDelete.id }
+                Tabs.WOCHE -> WeekView(innerPadding, taskList, deadlineList , onDeleteTaskClick = { taskToDelete ->
+                        taskList = taskList.filter { it.id != taskToDelete.id }
 
-                    storageManager.saveTodoTasks(taskList)
-                })
+                        storageManager.saveTodoTasks(taskList)
+                    },
+                    onSelectTaskClick = { task ->
+
+                        println("SELECTED_TASK_VALUE: id ${task.id}, title: ${task.title}, dayoftask: ${task.dayOfTask}, linkedDeadline: ${task.linkedDeadline}")
+
+                        val intent = Intent(context, MainActivity::class.java).apply {
+                            putExtra("EXTRA_TASK_ID",task.id)
+                            putExtra("EXTRA_DEADLINE_ID", task.linkedDeadline)
+
+                            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                        }
+
+                        context.startActivity(intent)
+                    })
                 Tabs.DEADLINE -> DeadlineView(
                     innerPadding,
                     deadlineList,
@@ -207,6 +232,63 @@ fun PlannerScreen() {
 
                         storageManager.saveDeadlines(deadlineList)
                     })
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DeadlineDropDown(onDeadlineSelected: (Int?) -> Unit, dropdownElements: List<TaskDeadline>) {
+    var isDropdownExpanded by remember { mutableStateOf(false) }
+
+    var selectedDeadlineTitle by remember { mutableStateOf<String?>(null) }
+
+    ExposedDropdownMenuBox(
+        expanded = isDropdownExpanded,
+        onExpandedChange = { isDropdownExpanded = !isDropdownExpanded}
+    ) {
+        OutlinedTextField(
+            modifier = Modifier
+                .menuAnchor(type = MenuAnchorType.PrimaryNotEditable)
+                .fillMaxWidth(),
+            value = selectedDeadlineTitle ?: "",
+            onValueChange = {},
+            readOnly = true,
+            label = {
+                Text(
+                    if (selectedDeadlineTitle == null) "Deadline" else "Verknüpfte Deadline"
+                )
+            },
+            placeholder = {
+                Text("Wähle...")
+            },
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isDropdownExpanded) },
+            colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors()
+        )
+
+        ExposedDropdownMenu(
+            expanded = isDropdownExpanded,
+            onDismissRequest = { isDropdownExpanded = false }
+        ) {
+            DropdownMenuItem(
+                text = { Text("Keine Deadline") },
+                onClick = {
+                    selectedDeadlineTitle = null
+                    onDeadlineSelected(null)
+                    isDropdownExpanded = false
+                }
+            )
+
+            dropdownElements.forEach { deadline ->
+                DropdownMenuItem(
+                    text = { Text(deadline.title) },
+                    onClick = {
+                        onDeadlineSelected(deadline.id)
+                        isDropdownExpanded = false
+                    },
+                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                )
             }
         }
     }
@@ -250,7 +332,9 @@ fun WeekDayDropdown(selectedDay: String, onDaySelected: (String) -> Unit, dropdo
         onExpandedChange = { isDropdownExpanded = !isDropdownExpanded}
     ) {
         OutlinedTextField(
-            modifier = Modifier.menuAnchor(type = MenuAnchorType.PrimaryNotEditable).fillMaxWidth(),
+            modifier = Modifier
+                .menuAnchor(type = MenuAnchorType.PrimaryNotEditable)
+                .fillMaxWidth(),
             value = selectedDay,
             onValueChange = {},
             readOnly = true,

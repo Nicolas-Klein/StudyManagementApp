@@ -5,7 +5,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
-import com.example.studymanagementapp.ui.screens.PlannerScreen
+import com.example.studymanagementapp.ui.screens.PlanerScreen
 import org.junit.Rule
 import org.junit.Test
 
@@ -17,7 +17,7 @@ class PlannerUiTest {
     @Test
     fun plannerScreenUiTest() {
         composeTestRule.setContent {
-            PlannerScreen()
+            PlanerScreen()
         }
 
         composeTestRule.onNodeWithText("Neue Aufgabe hinzufügen").assertDoesNotExist()
