@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircleOutline
 import androidx.compose.material.icons.filled.Delete
@@ -28,10 +30,13 @@ fun WeekviewCards(weekday: String, taskList: List<TaskForDay>, deadlineList: Lis
 
     val tasksForThisDay = filterTasksByDay(taskList, weekday)
 
+    val state = rememberScrollState()
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
+            .padding(vertical = 8.dp).
+            verticalScroll(state)
     ) {
         Text(
             text = weekday,
