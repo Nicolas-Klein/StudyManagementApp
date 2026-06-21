@@ -6,6 +6,7 @@ import com.example.studymanagementapp.data.TaskForDay
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import androidx.core.content.edit
 
 class StorageManager(context: Context) {
 
@@ -14,7 +15,7 @@ class StorageManager(context: Context) {
 
     fun saveTodoTasks(tasks: List<TaskForDay>) {
         val jsonString = gson.toJson(tasks)
-        sharedPreferences.edit().putString("todo_tasks", jsonString).apply()
+        sharedPreferences.edit { putString("todo_tasks", jsonString) }
     }
 
     fun loadTodoTasks(): List<TaskForDay> {
@@ -25,7 +26,7 @@ class StorageManager(context: Context) {
 
     fun saveDeadlines(tasks: List<TaskDeadline>) {
         val jsonString = gson.toJson(tasks)
-        sharedPreferences.edit().putString("deadline_task", jsonString).apply()
+        sharedPreferences.edit { putString("deadline_task", jsonString) }
     }
 
     fun loadDeadlines(): List<TaskDeadline> {

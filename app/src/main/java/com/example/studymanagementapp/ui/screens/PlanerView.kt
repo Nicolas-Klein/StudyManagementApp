@@ -213,8 +213,6 @@ fun PlanerScreen() {
                     },
                     onSelectTaskClick = { task ->
 
-                        println("SELECTED_TASK_VALUE: id ${task.id}, title: ${task.title}, dayoftask: ${task.dayOfTask}, linkedDeadline: ${task.linkedDeadline}")
-
                         val intent = Intent(context, MainActivity::class.java).apply {
                             putExtra("EXTRA_TASK_ID",task.id)
                             putExtra("EXTRA_DEADLINE_ID", task.linkedDeadline)

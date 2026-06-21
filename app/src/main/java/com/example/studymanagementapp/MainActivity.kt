@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,12 +21,14 @@ import com.example.studymanagementapp.ui.components.SharedBottomNavigationBar
 import com.example.studymanagementapp.ui.components.SharedTopBar
 import com.example.studymanagementapp.ui.screens.PomodoroMainScreen
 import com.example.studymanagementapp.ui.theme.StudyManagementAppTheme
+import com.example.studymanagementapp.viewmodel.TimerViewModel
 
 class MainActivity : ComponentActivity() {
 
     private var taskIdState by mutableStateOf<Int?>(null)
     private var deadlineIdState by mutableStateOf<Int?>(null)
 
+    private val timerViewModel by viewModels<TimerViewModel>()
 
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -46,6 +49,7 @@ class MainActivity : ComponentActivity() {
                         PomodoroMainScreen(
                             initialTaskName = taskIdState,
                             initialDeadlineName = deadlineIdState,
+                            viewModel = timerViewModel
                         )
                     }
 
@@ -76,15 +80,8 @@ class MainActivity : ComponentActivity() {
     private fun extractIdsFromIntent(intent: Intent?){
 
         if(intent == null) {
-            println("DEBUG_TIMER: Intent ist komplett null")
+            println("DEBUG_TIMER: Intent ist null")
             return
-        }
-
-        val bundle = intent.extras
-        if(bundle != null) {
-            for (key in bundle.keySet()) {
-                println("DEBUG_TIMER: Gefundene Extra -> Key: $key, Wert: ${bundle.get(key)}, Typ: ${bundle.get(key)?.javaClass?.simpleName}")
-            }
         }
 
         val taskId = intent.getIntExtra("EXTRA_TASK_ID", -1)
