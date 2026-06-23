@@ -23,8 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
 import com.example.studymanagementapp.data.TaskDeadline
 import com.example.studymanagementapp.data.TaskForDay
 import com.example.studymanagementapp.storage.StorageManager
@@ -34,9 +32,12 @@ import com.example.studymanagementapp.ui.components.ShortBreakTimerView
 import com.example.studymanagementapp.utils.calculateTimerInterval
 import com.example.studymanagementapp.utils.formatTime
 import com.example.studymanagementapp.data.PomodoroState
-import com.example.studymanagementapp.viewmodel.DeadlineCheckWorker
 import com.example.studymanagementapp.viewmodel.TimerViewModel
 
+// Test Notification
+import com.example.studymanagementapp.viewmodel.DeadlineCheckWorker
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 
 @Composable
 fun PomodoroMainScreen(
@@ -141,6 +142,7 @@ fun PomodoroMainScreen(
             Button(
                 onClick = {
                     viewModel.resetTimer()
+                    viewModel.stopAlarm()
                 }
             ) {
                 Text("Reset")
@@ -148,6 +150,7 @@ fun PomodoroMainScreen(
 
             Spacer(modifier = Modifier.width(16.dp))
 
+            /*
             Button(
                 onClick = {
                     // Test Notification
@@ -159,6 +162,7 @@ fun PomodoroMainScreen(
             ) {
                 Text("Test Notification")
             }
+            */
         }
     }
 }

@@ -1,14 +1,20 @@
 package com.example.studymanagementapp.viewmodel
 
+import android.app.Application
+import android.content.Context
+import android.media.AudioAttributes
+import android.media.MediaPlayer
+import android.media.RingtoneManager
+import android.net.Uri
 import android.os.CountDownTimer
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import com.example.studymanagementapp.data.PomodoroState
 import com.example.studymanagementapp.utils.PomodoroConfig
 
-class TimerViewModel : ViewModel() {
+class TimerViewModel(application: Application) : AndroidViewModel(application) {
 
     var timeLeftInMillis by mutableStateOf(25 * 60 * 1000L)
         private set
@@ -27,6 +33,8 @@ class TimerViewModel : ViewModel() {
     private var longBreakTime = PomodoroConfig.LONG_BREAK_TIME
 
     private var countDownTimer: CountDownTimer? = null
+
+    private var mediaPlayer: MediaPlayer? = null
 
     fun setTimerDuration(focusMillis: Long, breakMillis: Long) {
         if (isTimerRunning) return
@@ -51,6 +59,8 @@ class TimerViewModel : ViewModel() {
     fun startTimer() {
         if (isTimerRunning) return
 
+        stopAlarm()
+
         isTimerRunning = true
 
         countDownTimer = object : CountDownTimer(timeLeftInMillis, 1000){
@@ -61,6 +71,7 @@ class TimerViewModel : ViewModel() {
             override fun onFinish() {
                 isTimerRunning = false
                 handleTimerFinished()
+
             }
         }.start()
     }
@@ -74,6 +85,8 @@ class TimerViewModel : ViewModel() {
     }
 
     fun pauseTimer() {
+        stopAlarm()
+
         countDownTimer?.cancel()
         isTimerRunning = false
     }
@@ -84,6 +97,10 @@ class TimerViewModel : ViewModel() {
     }
 
     fun handleTimerFinished() {
+
+
+        playDefaultAlarmSound(getApplication())
+
         if(currentScreen == PomodoroState.FOCUS) {
             focusCycleCount++
 
@@ -103,6 +120,50 @@ class TimerViewModel : ViewModel() {
     override fun onCleared() {
         super.onCleared()
         countDownTimer?.cancel()
+        stopAlarm()
+    }
+
+    fun playDefaultAlarmSound(context: Context) {
+        try {
+            stopAlarm()
+
+            val alarmUri: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM) ?: RingtoneManager.getDefaultUri(
+                RingtoneManager.TYPE_NOTIFICATION)
+
+
+            mediaPlayer = MediaPlayer().apply {
+                setDataSource(context, alarmUri)
+
+                setAudioAttributes(
+                    AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_ALARM)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .build()
+                )
+
+                prepare()
+                start()
+            }
+
+
+        }catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun stopAlarm() {
+        try {
+            mediaPlayer?.let { player ->
+                if (player.isPlaying) {
+                    player.stop()
+                }
+                player.release()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            mediaPlayer == null
+        }
     }
 
 }
