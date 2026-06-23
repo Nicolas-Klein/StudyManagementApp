@@ -141,16 +141,26 @@ fun PomodoroMainScreen(
             Button(
                 onClick = {
                     viewModel.resetTimer()
+                }
+            ) {
+                Text("Reset")
+            }
 
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Button(
+                onClick = {
+                    // Test Notification
                     val testWorkRequest = OneTimeWorkRequestBuilder<DeadlineCheckWorker>().build()
                     WorkManager.getInstance(context).enqueue(testWorkRequest)
 
                     println("DEBUG_WORKER: Worker test abgeschlossen")
                 }
             ) {
-                Text("Reset")
+                Text("Test Notification")
             }
         }
     }
 }
+
 
