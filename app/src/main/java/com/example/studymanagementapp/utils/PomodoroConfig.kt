@@ -9,7 +9,7 @@ object PomodoroConfig {
     const val URGENT_SHORT_BREAK_TIME = 10 * 60 * 1000L
     const val LONG_BREAK_TIME = 20 * 60 * 1000L
 
-    const val FOKUS_TIME_COLOR = 0xFFE57373
+    const val FOCUS_TIME_COLOR = 0xFFE57373
 
     const val SHORT_BREAK_COLOR = 0xFF81C784
 
