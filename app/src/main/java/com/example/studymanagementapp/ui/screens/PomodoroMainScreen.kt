@@ -77,7 +77,7 @@ fun PomodoroMainScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = when(viewModel.currentScreen) {
+            text = when (viewModel.currentScreen) {
                 PomodoroState.FOCUS -> "Fokus-Phase (${viewModel.focusCycleCount})"
                 PomodoroState.SHORT_BREAK -> "Kurze Pause"
                 PomodoroState.LONG_BREAK -> "Lange erholungspause"

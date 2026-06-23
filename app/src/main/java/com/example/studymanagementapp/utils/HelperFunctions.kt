@@ -4,6 +4,8 @@ import com.example.studymanagementapp.data.TaskDeadline
 import com.example.studymanagementapp.data.TaskForDay
 import com.example.studymanagementapp.utils.PomodoroConfig.FOCUS_TIME
 import com.example.studymanagementapp.utils.PomodoroConfig.SHORT_BREAK_TIME
+import com.example.studymanagementapp.utils.PomodoroConfig.URGENT_FOCUS_TIME
+import com.example.studymanagementapp.utils.PomodoroConfig.URGENT_SHORT_BREAK_TIME
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -55,8 +57,6 @@ fun calculateTimerInterval(deadline: TaskDeadline?): Pair<Long, Long> {
 
     return try {
 
-        //val daysRemaining = calculateDaysRemaining(deadline.dueDate, taskDate.toString())
-
         val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
         val deadlineDate = LocalDate.parse(deadline.dueDate, formatter)
 
@@ -64,25 +64,19 @@ fun calculateTimerInterval(deadline: TaskDeadline?): Pair<Long, Long> {
 
         val daysRemaining = ChronoUnit.DAYS.between(today, deadlineDate)
 
-        println("DEBUG_DENKFEHLER_FIX:")
-        println("-> Heute ist: $today")
-        println("-> Die Deadline ist am: $deadlineDate")
-        println("-> Tage verbleibend ab HEUTE: $daysRemaining")
-
         if (daysRemaining in 0..7) {
             println("DEBUG_INTERVAL: Endspurt! Schalte um auf 50/10 ${deadline.dueDate}")
 
-            val urgentFocus = 50 * 60 * 1000
-            val urgentBreak = 10 * 60 * 1000
-            Pair(urgentFocus, urgentBreak)
+            Pair(URGENT_FOCUS_TIME, URGENT_SHORT_BREAK_TIME)
 
         } else {
             println("DEBUG_INTERVAL: Genug Zeit. Nutze Config-Standardwerte.")
+            println("DEBUG_INTERVAL: ${deadline.dueDate}.")
             Pair(FOCUS_TIME, SHORT_BREAK_TIME)
         }
 
     } catch (e: Exception) {
         println("DEBUG_INTERVAL: Fehler beim Parsen: ${e.message}. Fallback auf Config")
         Pair(FOCUS_TIME, SHORT_BREAK_TIME)
-    } as Pair<Long, Long>
+    }
 }
