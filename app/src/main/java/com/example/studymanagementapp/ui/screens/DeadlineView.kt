@@ -23,23 +23,13 @@ fun DeadlineView(innerPadding: PaddingValues, deadlineList: List<TaskDeadline>, 
 
     val sortedDeadlines = remember(deadlineList) {
 
-        val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        val outputFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+        val outputFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
         deadlineList.sortedBy { task ->
             try {
-                LocalDate.parse(task.dueDate, inputFormatter)
+                LocalDate.parse(task.dueDate, outputFormatter)
             } catch (_: Exception) {
                 LocalDate.MAX
-            }
-        }.map { task ->
-            try {
-                val parsedDate = LocalDate.parse(task.dueDate, inputFormatter)
-                val formattedDate = parsedDate.format(outputFormatter)
-
-                task.copy(dueDate = formattedDate)
-            } catch (_: Exception) {
-                task
             }
         }
 
