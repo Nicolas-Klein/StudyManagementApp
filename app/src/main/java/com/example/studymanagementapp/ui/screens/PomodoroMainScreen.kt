@@ -23,6 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.example.studymanagementapp.data.TaskDeadline
 import com.example.studymanagementapp.data.TaskForDay
 import com.example.studymanagementapp.storage.StorageManager
@@ -32,6 +34,7 @@ import com.example.studymanagementapp.ui.components.ShortBreakTimerView
 import com.example.studymanagementapp.utils.calculateTimerInterval
 import com.example.studymanagementapp.utils.formatTime
 import com.example.studymanagementapp.data.PomodoroState
+import com.example.studymanagementapp.viewmodel.DeadlineCheckWorker
 import com.example.studymanagementapp.viewmodel.TimerViewModel
 
 
@@ -138,6 +141,11 @@ fun PomodoroMainScreen(
             Button(
                 onClick = {
                     viewModel.resetTimer()
+
+                    val testWorkRequest = OneTimeWorkRequestBuilder<DeadlineCheckWorker>().build()
+                    WorkManager.getInstance(context).enqueue(testWorkRequest)
+
+                    println("DEBUG_WORKER: Worker test abgeschlossen")
                 }
             ) {
                 Text("Reset")

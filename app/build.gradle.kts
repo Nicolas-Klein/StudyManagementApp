@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.text)
     implementation("com.google.code.gson:gson:2.10.1")
     implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.work.runtime.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
