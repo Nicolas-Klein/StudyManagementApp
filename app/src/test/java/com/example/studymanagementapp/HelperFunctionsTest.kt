@@ -49,6 +49,7 @@ class HelperFunctionsTest {
 
     @Test
     fun calculateTimerIntervalTest() {
+        println("Calculate Timer Interval")
 
         val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
