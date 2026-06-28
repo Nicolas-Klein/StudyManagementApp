@@ -45,6 +45,7 @@ import com.example.studymanagementapp.data.TaskForDay
 import com.example.studymanagementapp.data.TaskDeadline
 import kotlin.collections.plus
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.platform.testTag
 
 
 enum class Tabs {
@@ -197,7 +198,8 @@ fun PlanerScreen() {
                     Tab(
                         selected = selectedTabIndex.ordinal == index,
                         onClick = { selectedTabIndex = title },
-                        text = { Text(text = title.toString()) }
+                        text = { Text(text = title.toString()) },
+                        modifier = Modifier.testTag("tab_${title}")
                     )
                 }
             }

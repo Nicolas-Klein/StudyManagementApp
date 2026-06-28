@@ -1,7 +1,9 @@
 package com.example.studymanagementapp
 
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
@@ -21,15 +23,39 @@ class PlannerUiTest {
         }
 
         composeTestRule.onNodeWithText("Neue Aufgabe hinzufügen").assertDoesNotExist()
-
         composeTestRule.onNodeWithContentDescription("Add").performClick()
-
         composeTestRule.onNodeWithText("Neue Aufgabe hinzufügen").assertExists()
-
         composeTestRule.onNodeWithText("Titel / Beschreibung").performTextInput("Test Aufgabe")
-
         composeTestRule.onNodeWithText("Speichern").performClick()
-
         composeTestRule.onNodeWithText("Neue Aufgabe hinzufügen").assertDoesNotExist()
+
+        // test des Deadline Tabs
+        composeTestRule.onNodeWithTag("tab_DEADLINE").performClick()
+        composeTestRule.onNodeWithText("Anstehende Fristen und Klausuren").assertIsDisplayed()
+
+        // test des Wochen Tabs und der dazugehörigen Wochenplaner Tabs
+        composeTestRule.onNodeWithTag("tab_WOCHE").performClick()
+        composeTestRule.onNodeWithText("MO").assertIsDisplayed()
+        composeTestRule.onNodeWithText("MO").performClick()
+        composeTestRule.onNodeWithText("Montag").assertIsDisplayed()
+        composeTestRule.onNodeWithText("DI").assertIsDisplayed()
+        composeTestRule.onNodeWithText("DI").performClick()
+        composeTestRule.onNodeWithText("Dienstag").assertIsDisplayed()
+        composeTestRule.onNodeWithText("MI").assertIsDisplayed()
+        composeTestRule.onNodeWithText("MI").performClick()
+        composeTestRule.onNodeWithText("Mittwoch").assertIsDisplayed()
+        composeTestRule.onNodeWithText("DO").assertIsDisplayed()
+        composeTestRule.onNodeWithText("DO").performClick()
+        composeTestRule.onNodeWithText("Donnerstag").assertIsDisplayed()
+        composeTestRule.onNodeWithText("FR").assertIsDisplayed()
+        composeTestRule.onNodeWithText("FR").performClick()
+        composeTestRule.onNodeWithText("Freitag").assertIsDisplayed()
+        composeTestRule.onNodeWithText("SA").assertIsDisplayed()
+        composeTestRule.onNodeWithText("SA").performClick()
+        composeTestRule.onNodeWithText("Samstag").assertIsDisplayed()
+        composeTestRule.onNodeWithText("SO").assertIsDisplayed()
+        composeTestRule.onNodeWithText("SO").performClick()
+        composeTestRule.onNodeWithText("Sonntag").assertIsDisplayed()
+
     }
 }

@@ -48,8 +48,8 @@ fun SharedBottomNavigationBar(currentScreen: NavigationTarget) {
 
         NavigationBarItem(
             selected = currentScreen == NavigationTarget.PLANNER,
-            label = { Text("Planner") },
-            icon = { Icon(Icons.Filled.DateRange, contentDescription = "Planner") },
+            label = { Text("Planer") },
+            icon = { Icon(Icons.Filled.DateRange, contentDescription = "Planer") },
             onClick = {
                 if (currentScreen != NavigationTarget.PLANNER) {
                     val intent = Intent(context, PlanerActivity::class.java)
