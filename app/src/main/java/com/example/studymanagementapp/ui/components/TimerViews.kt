@@ -15,9 +15,14 @@ import com.example.studymanagementapp.utils.PomodoroConfig.FOCUS_TIME_COLOR
 import com.example.studymanagementapp.utils.PomodoroConfig.LONG_BREAK_COLOR
 import com.example.studymanagementapp.utils.PomodoroConfig.SHORT_BREAK_COLOR
 
+/**
+ * Komponente zur Darstellung der Fokus-Phase des Pomodoro-Timer.
+ *
+ * @param formattedTime Enthält die runterlaufende Zeit des Timers die nach dem Format mm:ss als String
+ * @param modifier Der [Modifier], mit dem Layout-Eigenschaften wie Abstände (Padding), Größen oder Ausrichtungen von der Übergeordneten Komponente angepasst werden können.
+ */
 @Composable
 fun LearningTimerView(formattedTime: String, modifier: Modifier = Modifier) {
-
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
@@ -43,9 +48,14 @@ fun LearningTimerView(formattedTime: String, modifier: Modifier = Modifier) {
     }
 }
 
+/**
+ * Komponente zur Darstellung der kurzen Pause-Phase des Pomodoro-Timer.
+ *
+ * @param formattedTime Enthält die runterlaufende Zeit des Timers die nach dem Format mm:ss als String
+ * @param modifier Der [Modifier], mit dem Layout-Eigenschaften wie Abstände (Padding), Größen oder Ausrichtungen von der Übergeordneten Komponente angepasst werden können.
+ */
 @Composable
 fun ShortBreakTimerView(formattedTime: String, modifier: Modifier = Modifier) {
-
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
@@ -72,9 +82,14 @@ fun ShortBreakTimerView(formattedTime: String, modifier: Modifier = Modifier) {
     }
 }
 
+/**
+ * Komponente zur Darstellung der langen Pause-Phase des Pomodoro-Timer.
+ *
+ * @param formattedTime Enthält die runterlaufende Zeit des Timers die nach dem Format mm:ss als String
+ * @param modifier Der [Modifier], mit dem Layout-Eigenschaften wie Abstände (Padding), Größen oder Ausrichtungen von der Übergeordneten Komponente angepasst werden können.
+ */
 @Composable
 fun LongBreakTimerView(formattedTime: String, modifier: Modifier = Modifier) {
-
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
@@ -98,5 +113,4 @@ fun LongBreakTimerView(formattedTime: String, modifier: Modifier = Modifier) {
             Text(text = formattedTime, style = MaterialTheme.typography.displayLarge)
         }
     }
-
 }

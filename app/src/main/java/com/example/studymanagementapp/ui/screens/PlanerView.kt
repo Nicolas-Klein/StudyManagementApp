@@ -47,12 +47,24 @@ import kotlin.collections.plus
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.testTag
 
-
+/**
+ * Definiert die Tabs die im Lernplaner zur Navigation verwendet werden.
+ */
 enum class Tabs {
+    /**
+     * Repräsentiert den Wochenplaner.
+     */
     WOCHE,
+    /**
+     * Repräsentiert den Deadline-Manager.
+     */
     DEADLINE
 }
 
+/**
+ * Eine Komponente, die [WeekView] und [DeadlineView] darstellt. Desweiteren übernimmt diese Komponente die Logik für das Laden und Speichern der Aufgaben- und Deadline-Listen, als auch das Löschen und Erstellen einzelner Items.
+ * Diese Komponente beinhaltet Diagloge für das Erstellen von Aufgaben und Deadlines.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlanerScreen() {
@@ -104,7 +116,7 @@ fun PlanerScreen() {
                 Text(text = if (selectedTabIndex == Tabs.WOCHE) "Neue Aufgabe hinzufügen" else "Neue Deadline hinzufügen")
             },
             text = {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Column(verticalArrangement = Arrangement.spacedBy(1.dp)) {
                     OutlinedTextField(
                         value = taskTitleInput,
                         onValueChange = { taskTitleInput = it },
@@ -237,6 +249,14 @@ fun PlanerScreen() {
     }
 }
 
+/**
+ * Komponente für die Darstellung des DeadlineDropdown. Dieses Dropdown enthält alle Deadlines ([TaskDeadline]) die sich in der Deadlineliste befinden.
+ *
+ * Ermöglicht eine optionale Verknüpfung einer Aufgabe zu einer bestimmten Deadline.
+ *
+ * @param onDeadlineSelected Event-Callback (Lambda), das die eindeutige ID der ausgewählten deadline ([TaskDeadline]) an die übergeordnete Logik zurück gibt. Übergibt null, falls die Auswahl aufgegeben wurde oder kein Element enthält.
+ * @param dropdownElements Die Liste der [TaskDeadline]-Objekte, die als Einträge in dem dropdown zur Auswahl stehen sollen.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DeadlineDropDown(onDeadlineSelected: (Int?) -> Unit, dropdownElements: List<TaskDeadline>) {
@@ -294,6 +314,13 @@ fun DeadlineDropDown(onDeadlineSelected: (Int?) -> Unit, dropdownElements: List<
     }
 }
 
+/**
+ * Komponente für die Darstellung des Datepickers, um ein Fälligkeitsdatum einer Deadline einzugeben.
+ *
+ * @param state Der aktuelle [DatePickerState], welcher den internen Auswahl-Zusantd und den aktuell fokusierten Kalendermonat des Dialogs verwaltet.
+ * @param onDateSelected Event-Callback (Lambda), das ausgelöst wird, wenn der Nutzer ein Datum auswählt. Gibt das Datum als String zurück.
+ * @param onDismiss Event-Callback (Lambda), das ausgelöst wird, wenn der Dialog geschlossen, abgebrochen oder durch einen Klick außerhalb des Fensters (Dismiss-to-Close) verlassen wird.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShowDatePicker(state: DatePickerState, onDateSelected: (String) -> Unit, onDismiss: () -> Unit) {
@@ -321,9 +348,18 @@ fun ShowDatePicker(state: DatePickerState, onDateSelected: (String) -> Unit, onD
 
 }
 
+/**
+ * Ein Dropdown für Wochentage.
+ *
+ * Ermöglicht dem Nutzer einen Wochentag für eine Aufgabe auszuwählen, um Aufgaben diem Tag zuzuweisen.
+ *
+ * @param selectedDay Der aktuell ausgewählte Wochentag (z.B. "Montag").
+ * @param onDaySelected Event-Callback (Lambda), das gefeuert wird, sobald der Nutzer einen neuen Tag auswählt. Übergibt den Namen des neu selektierten Tages als String zurück an die übergeordnete Logik (State Hoisting).
+ * @param dropdownElements Die liste der im Menü zur auswahl stehenden Wochentage (z.B. Montag - Sonntag).
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WeekDayDropdown(selectedDay: String, onDaySelected: (String) -> Unit, dropdownElements: List<String>){
+fun WeekDayDropdown(selectedDay: String, onDaySelected: (String) -> Unit, dropdownElements: List<String>) {
 
     var isDropdownExpanded by remember { mutableStateOf(false) }
 
@@ -361,8 +397,16 @@ fun WeekDayDropdown(selectedDay: String, onDaySelected: (String) -> Unit, dropdo
     }
 }
 
+/**
+ * Textfeld welches in Kombination mit [ShowDatePicker] genutzt wird.
+ *
+ * Diese Komponente ist dafür zuständig durch clicken des Textfeldes den [ShowDatePicker] anzeigbar zu machen.
+ *
+ * @param currentDateText zeigt den im Dropdown ausgewählten Wochentag. Default ist ("").
+ * @param onClick Event-Callback (Lambda), das beim Clicken auf das Textfeld aus gelöst wird.
+ */
 @Composable
-fun DeadlineDatePicker(currentDateText: String, onClick: () -> Unit){
+fun DeadlineDatePicker(currentDateText: String, onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()

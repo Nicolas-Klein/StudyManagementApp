@@ -18,6 +18,13 @@ import com.example.studymanagementapp.ui.components.DeadlineViewCard
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
+/**
+ * Container, der die Karten der Deadlines in einer Liste darstellt.
+ *
+ * @param innerPadding Parameter, welcher Abständer der übergeordneten Logik bekommt.
+ * @param deadlineList Liste aller Deadlines die dargestellt werden.
+ * @param onDeleteDeadlineClick Event-Callback (Lambda), das ausgelöst wird, wenn eine Aufgabe gelöscht wird. Über gibt das gewählte [TaskDeadline]-Objekt an die übergeordnete Logik (State hoisting).
+ */
 @Composable
 fun DeadlineView(innerPadding: PaddingValues, deadlineList: List<TaskDeadline>, onDeleteDeadlineClick: (TaskDeadline) -> Unit) {
 

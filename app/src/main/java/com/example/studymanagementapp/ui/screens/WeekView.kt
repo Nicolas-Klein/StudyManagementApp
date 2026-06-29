@@ -1,6 +1,5 @@
 package com.example.studymanagementapp.ui.screens
 
-
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,16 +21,51 @@ import com.example.studymanagementapp.ui.components.WeekviewCards
 import java.time.DayOfWeek
 import java.time.LocalDate
 
+/**
+ * Beinhaltet die sieben Wochentage für das erstellen der Tabs des Wochenplaners.
+ */
 enum class Weekdays {
+    /**
+     * Repräsentiert Montag in kurz Schreibform
+     */
     MO,
+    /**
+     * Repräsentiert Dienstag in kurz Schreibform
+     */
     DI,
+    /**
+     * Repräsentiert Mittwoch in kurz Schreibform
+     */
     MI,
+    /**
+     * Repräsentiert Donnerstag in kurz Schreibform
+     */
     DO,
+    /**
+     * Repräsentiert Freitag in kurz Schreibform
+     */
     FR,
+    /**
+     * Repräsentiert Samstag in kurz Schreibform
+     */
     SA,
+    /**
+     * Repräsentiert Sonntag in kurz Schreibform
+     */
     SO
 }
 
+/**
+ * Hauptkomponente für die Wochenübersicht (Wochenansicht) des Studienplaners.
+ *
+ * Der Wochenplaner besteht aus sieben Tabs, welche die Wochentage repräsentieren und die Aufgaben ([TaskForDay]) der jeweiligen Tage beinhalten.
+ *
+ * @param innerPadding Die vom übergeordneten Scaffold bereitgestellten [PaddingValues] (wichtig für die korrekte Platzierung unter Top- und Bottom-Bars).
+ * @param taskList Die aktuelle Liste aller für die Woche geplanten Aufgaben ([TaskForDay]).
+ * @param deadlineList Die Liste aller anstehenden Abgabefristen ([TaskDeadline]), die optinal Aufgaben zugewiesen wurden.
+ * @param onDeleteTaskClick Event-Callback, das ausgelöst wird, wenn der Nutzer eine Aufgabe löschen möchte. Übergibt das betroffene [TaskForDay]-Objekt.
+ * @param onSelectTaskClick Event-Callback, das ausgelöst wird, wenn eine Aufgabe als aktuelle Fokus-Aufgabe ausgewählt wird.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WeekView(innerPadding: PaddingValues, taskList: List<TaskForDay>, deadlineList: List<TaskDeadline>, onDeleteTaskClick: (TaskForDay) -> Unit, onSelectTaskClick: (TaskForDay) -> Unit) {

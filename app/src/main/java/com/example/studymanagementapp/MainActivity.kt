@@ -31,7 +31,15 @@ import com.example.studymanagementapp.ui.theme.StudyManagementAppTheme
 import com.example.studymanagementapp.viewmodel.DeadlineCheckWorker
 import com.example.studymanagementapp.viewmodel.TimerViewModel
 import java.util.concurrent.TimeUnit
+import com.example.studymanagementapp.data.TaskForDay
+import com.example.studymanagementapp.data.TaskDeadline
 
+
+/**
+ * Der primäre Einstiegspunkt (Main Entry Point) der Anwendung.
+ *
+ * Diese Activity initialisiert beim Start das UI-System des Timer, als auch die Bottom Navigation Bar, um zwischen den Activities zu navigieren (Pomodoro-Timer und Lernplaner).
+ */
 class MainActivity : ComponentActivity() {
 
     private var taskIdState by mutableStateOf<Int?>(null)
@@ -40,7 +48,11 @@ class MainActivity : ComponentActivity() {
     private val timerViewModel by viewModels<TimerViewModel>()
 
 
-
+    /**
+     * Wird aufgerufen, wenn die Activity das erste Mal gestartet wird.
+     *
+     * Diese Methode übernimmt die grundlegende Initialisierung der Activity, wie das definieren von Permissions, erstellen des [DeadlineCheckWorker] und Festlegen des visuellen Layouts mittels [setContent] als auch das Theme des Pomodoro-Timers.
+     */
     @OptIn(ExperimentalMaterial3Api::class)
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,7 +91,7 @@ class MainActivity : ComponentActivity() {
             StudyManagementAppTheme {
                 Scaffold(
                     bottomBar = { SharedBottomNavigationBar(currentScreen = NavigationTarget.TIMER) },
-                    topBar = { SharedTopBar("Focus-Timer") }
+                    topBar = { SharedTopBar("Fokus-Timer") }
                 ) { innerPadding ->
                     Surface(modifier = Modifier.padding(innerPadding)) {
                         PomodoroMainScreen(
@@ -94,6 +106,9 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    /**
+     * Wird am Ende des Komponentent-Lifecycle aufgerufen.
+     */
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     override fun finish() {
         super.finish()
@@ -105,6 +120,13 @@ class MainActivity : ComponentActivity() {
         )
     }
 
+    /**
+     * Wird vom Android-System aufgerufen, wenn die Aktivität gestartet wird, während sie bereits im Hintergrund aktiv war.
+     *
+     * Diese Methode fängt neue [Intent]-Signale ab, wenn der User beispielsweise eine Aufgabe als Fokus-Aufgabe setzt und diese Informationen von der MainActivity verarbeitet werden.
+     *
+     * @param intent Der neu eingegangene [Intent], der die Auslösedaten oder Extras enthält.
+     */
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
 
@@ -113,7 +135,14 @@ class MainActivity : ComponentActivity() {
         extractIdsFromIntent(intent)
     }
 
-    private fun extractIdsFromIntent(intent: Intent?){
+    /**
+     * Extrahiert die IDs der Übergebenen Aufgabe ([TaskForDay]) und Deadline ([TaskDeadline]).
+     *
+     * Diese Hilfsfunktion wird von der Funktion [onNewIntent] aufgerufen um die relevanten Informationen aus dem Intent zu lesen.
+     *
+     * @param intent Der [Intent], der beim Starten der Activity übergeben wurde. Kann null sein, wenn die App ganz normal gestartet wurde.
+     */
+    private fun extractIdsFromIntent(intent: Intent?) {
 
         if(intent == null) {
             println("DEBUG_TIMER: Intent ist null")

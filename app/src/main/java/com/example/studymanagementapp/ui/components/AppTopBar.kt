@@ -9,6 +9,13 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalConfiguration
 
+/**
+ * Eine wiederverwendbare, zentrale Top-Bar (Header), die auf verschiedenen Bildschirmen der Anwendung angezeigt wird.
+ *
+ * Die Bar passt ihren Titel dynamisch an den aktuellen Screen an und blendet im Querformat (Landscape) automatisch aus, um den Bildschirmplatz optimal zu nutzen.
+ *
+ * @param screen Der Name des aktuellen aktiven Bildschirms (z.B. "Fokus-Timer" oder "Lernplaner")
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SharedTopBar(screen: String) {

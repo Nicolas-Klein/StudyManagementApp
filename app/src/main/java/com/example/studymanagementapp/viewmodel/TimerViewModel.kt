@@ -14,6 +14,12 @@ import androidx.lifecycle.AndroidViewModel
 import com.example.studymanagementapp.data.PomodoroState
 import com.example.studymanagementapp.utils.PomodoroConfig
 
+/**
+ * Das zentrale ViewModel für die Verwaltung des Pomodoro-Timers.
+ * Es steuert den gesamten Lebenszyklus des Countdowns (Start, Pause, Reset),
+ * verwaltet die Zustände der Fokus- und Pausenphasen und interagiert mit dem
+ * [MediaPlayer], um Audiosignale bei Ablauf des Timers abzuspielen.
+ */
 class TimerViewModel(application: Application) : AndroidViewModel(application) {
 
     var timeLeftInMillis by mutableStateOf(25 * 60 * 1000L)
@@ -36,6 +42,12 @@ class TimerViewModel(application: Application) : AndroidViewModel(application) {
 
     private var mediaPlayer: MediaPlayer? = null
 
+    /**
+     * Setzt die Timer Intervalle für die Fokus- und kurze-Pause-Phasen, falls diese geändert wurden
+     *
+     * @param focusMillis Die Zeit des Timer in der Fokus-Phase
+     * @param breakMillis Die Zeit des Timer in der kurzen Pause-Phase
+     */
     fun setTimerDuration(focusMillis: Long, breakMillis: Long) {
         if (isTimerRunning) return
 
@@ -56,6 +68,9 @@ class TimerViewModel(application: Application) : AndroidViewModel(application) {
         if(wasRunning) startTimer()
     }
 
+    /**
+     * Startet den Timer
+     */
     fun startTimer() {
         if (isTimerRunning) return
 
@@ -76,6 +91,9 @@ class TimerViewModel(application: Application) : AndroidViewModel(application) {
         }.start()
     }
 
+    /**
+     * Updated die Zeit die im Timer aktuellen Übrig ist.
+     */
     private fun updateTimeForCurrentScreen() {
         timeLeftInMillis = when(currentScreen) {
             PomodoroState.FOCUS -> totalFocusTime
@@ -84,6 +102,9 @@ class TimerViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    /**
+     * Pausiert den Timer
+     */
     fun pauseTimer() {
         stopAlarm()
 
@@ -91,13 +112,20 @@ class TimerViewModel(application: Application) : AndroidViewModel(application) {
         isTimerRunning = false
     }
 
+    /**
+     * Setzt die zeit des Timer zurück.
+     */
     fun resetTimer() {
         pauseTimer()
         updateTimeForCurrentScreen()
     }
 
+    /**
+     * Beinhaltet die Logik, die ausgeführt wird, wenn ein Timer 0 erreicht.
+     *
+     * Hier wird zwischen den verschiedenen Timer Phasen gewechselt
+     */
     fun handleTimerFinished() {
-
 
         playDefaultAlarmSound(getApplication())
 
@@ -117,12 +145,25 @@ class TimerViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    /**
+     * Wird vom Android-Framework automatisch aufgerufen, wenn das ViewModel nicht mehr
+     * benötigt und final zerstört wird (z. B. wenn der Screen dauerhaft verlassen wird).
+     *
+     * Diese Methode dient als Lebenszyklus-Bereinigung (Cleanup), um Speicherlecks zu verhindern.
+     * Hier wird der [MediaPlayer] hart gestoppt und dessen Systemressourcen freigegeben,
+     * damit der Alarmton nicht endlos im Hintergrund weiterläuft, wenn die App geschlossen wird.
+     */
     override fun onCleared() {
         super.onCleared()
         countDownTimer?.cancel()
         stopAlarm()
     }
 
+    /**
+     * Ist für das Abspielen des Alarm-Sound zuständig.
+     *
+     * Beinhaltet den [MediaPlayer], welcher für das erstellen und abspeielen des Alarms verwendet wird.
+     */
     fun playDefaultAlarmSound(context: Context) {
         try {
             stopAlarm()
@@ -151,6 +192,11 @@ class TimerViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    /**
+     * Stopt den Alarm
+     *
+     * Stopt den Alarm und setzt den [MediaPlayer] auf null.
+     */
     fun stopAlarm() {
         try {
             mediaPlayer?.let { player ->

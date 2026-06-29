@@ -25,6 +25,14 @@ import com.example.studymanagementapp.data.TaskDeadline
 import com.example.studymanagementapp.utils.calculateDaysRemaining
 import java.time.LocalDate
 
+/**
+ * Eine UI-Komponente (Card), die die Details einer Deadline ([TaskDeadline]) anzeigt.
+ *
+ * Die Karte stellt den Titel und das Fälligkeitsdatum übersichtlich dar und bietet einen Lösch-Button, um die Deadline zu löschen
+ *
+ * @param deadline Das [TaskDeadline]-Datenobjekt, dessen Informationen auf der Karte dargestellt werden.
+ * @param onDeleteDeadline Event-Callback (Lambda), das ausgelöst wird, wenn der Nutzer eine Deadline löschen möchte. Übergibt das zu löschende [TaskDeadline]-Objekt zurück an die übergeordnete Logik (State Hoisting).
+ */
 @Composable
 fun DeadlineViewCard(deadline: TaskDeadline, onDeleteDeadline: (TaskDeadline) -> Unit) {
 

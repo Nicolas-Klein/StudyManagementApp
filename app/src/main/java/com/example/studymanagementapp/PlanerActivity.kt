@@ -17,7 +17,18 @@ import com.example.studymanagementapp.ui.components.SharedTopBar
 import com.example.studymanagementapp.ui.screens.PlanerScreen
 import com.example.studymanagementapp.ui.theme.StudyManagementAppTheme
 
+/**
+ * Die Activity des Lernplaners.
+ *
+ * Diese Activity initialisiert beim Start den Lernplaner und desen UI
+ */
 class PlanerActivity : ComponentActivity() {
+
+    /**
+     * Wird aufgerufen, wenn die Activity das erste Mal gestartet wird.
+     *
+     * Diese Methode übernimmt die grundlegende Initialisierung der Activity, wie das Festlegen des visuellen Layouts mittels [setContent] und das allegemeine Theme des Lernplaners.
+     */
     @OptIn(ExperimentalMaterial3Api::class)
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +48,9 @@ class PlanerActivity : ComponentActivity() {
         }
     }
 
+    /**
+     * Wird am Ende des Komponentent-Lifecycle aufgerufen.
+     */
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     override fun finish() {
         super.finish()

@@ -25,6 +25,18 @@ import com.example.studymanagementapp.data.TaskDeadline
 import com.example.studymanagementapp.data.TaskForDay
 import com.example.studymanagementapp.utils.filterTasksByDay
 
+/**
+ * Eine UI-Komponente, welche die Übersicht für einen Wochentag und die dazu gehörigen Aufgaben Darstellt.
+ *
+ * Diese Komponente fungiert als Container und listet die Aufgaben des gewählten Tages [TaskForDay].
+ * Die Karten der Aufgaben enthalten den Namen der Aufgabe und den namen einer optinal verbundenen Deadline als auch einen Auswahl- und Lösch-Button, um eine Aufgabe als aktuellen Fokus auszuwählen oder eine Aufgabe zu löschen.
+ *
+ * @param weekday Der Name des gewählten Wochentags (z.B. "Montag").
+ * @param taskList Die Liste der Aufgaben.
+ * @param deadlineList Die Liste der Deadlines.
+ * @param onDeleteTask Event-Callback (Lambda), das ausgelöst wird, wenn eine Aufgabe gelöscht wird. Über gibt das gewählte [TaskForDay]-Objekt an die übergeordnete Logik (State hoisting).
+ * @param onSelectTask Event-Callback (Lambda), das ausgelöst wird, wenn eine Aufgabe ausgewählt wird. Über gibt das gewählte [TaskForDay]-Objekt an die übergeordnete Logik (State hoisting).
+ */
 @Composable
 fun WeekviewCards(weekday: String, taskList: List<TaskForDay>, deadlineList: List<TaskDeadline>, onDeleteTask: (TaskForDay) -> Unit, onSelectTask: (TaskForDay) -> Unit) {
 

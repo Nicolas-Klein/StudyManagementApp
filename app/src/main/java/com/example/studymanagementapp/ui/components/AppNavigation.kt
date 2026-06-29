@@ -19,6 +19,13 @@ import com.example.studymanagementapp.R
 import com.example.studymanagementapp.data.NavigationTarget
 
 
+/**
+ * Eine wiederverwendbare, zentrale Navigation-Bar, die auf verschiedenen Bildschirmen der Anwendung angezeigt wird.
+ *
+ * Die Navigation Bar enthält Navigationsoptionen für die Activities der App (MainActivity / PlanerActivity).
+ *
+ * @param currentScreen Das aktuell ausgeählte [NavigationTarget], das bestimmt, welcher Menüpunkt als aktiv (selected) markiert wird.
+ */
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 @Composable
 fun SharedBottomNavigationBar(currentScreen: NavigationTarget) {

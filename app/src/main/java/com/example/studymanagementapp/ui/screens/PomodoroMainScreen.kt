@@ -39,6 +39,13 @@ import com.example.studymanagementapp.viewmodel.DeadlineCheckWorker
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 
+/**
+ * Der Container, der die verschiednen Timer-Phasen des Pomodoro-Timers darstellt.
+ *
+ * @param initialTaskName Zeigt den Namen der vom Nutzer ausgewählte Fokus-Aufgabe. Default ist "Bereit für den Fokus?"
+ * @param initialDeadlineName Enthält die optinale Deadline von der vom Nutzer ausgewählten Fokus-Aufgabe.
+ * @param viewModel ViewModel, dass die Logik des Timers beinhaltet, darunter das herunterzählen, starten, stoppen und das wechseln der Timer-Phasen.
+ */
 @Composable
 fun PomodoroMainScreen(
     initialTaskName: Int?,
