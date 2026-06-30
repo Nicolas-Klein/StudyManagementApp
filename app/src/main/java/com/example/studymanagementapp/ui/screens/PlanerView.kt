@@ -123,8 +123,6 @@ fun PlanerScreen() {
                         label = { Text("Titel / Beschreibung" ) },
                         modifier = Modifier.fillMaxWidth()
                     )
-
-
                     when(selectedTabIndex){
                         Tabs.WOCHE -> {
                             WeekDayDropdown(
@@ -144,7 +142,6 @@ fun PlanerScreen() {
                             onClick = { showDatePicker = true }
                         )
                     }
-
                 }
             },
             confirmButton = {
@@ -226,7 +223,6 @@ fun PlanerScreen() {
                         storageManager.saveTodoTasks(taskList)
                     },
                     onSelectTaskClick = { task ->
-
                         val intent = Intent(context, MainActivity::class.java).apply {
                             putExtra("EXTRA_TASK_ID",task.id)
                             putExtra("EXTRA_DEADLINE_ID", task.linkedDeadline)
@@ -324,7 +320,6 @@ fun DeadlineDropDown(onDeadlineSelected: (Int?) -> Unit, dropdownElements: List<
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShowDatePicker(state: DatePickerState, onDateSelected: (String) -> Unit, onDismiss: () -> Unit) {
-
     DatePickerDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
@@ -345,7 +340,6 @@ fun ShowDatePicker(state: DatePickerState, onDateSelected: (String) -> Unit, onD
     ) {
         DatePicker(state = state)
     }
-
 }
 
 /**
@@ -424,7 +418,6 @@ fun DeadlineDatePicker(currentDateText: String, onClick: () -> Unit) {
                 disabledBorderColor = MaterialTheme.colorScheme.outline,
                 disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
             )
-
         )
     }
 }

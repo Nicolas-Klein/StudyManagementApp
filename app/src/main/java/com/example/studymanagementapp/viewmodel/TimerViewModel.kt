@@ -8,6 +8,7 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.os.CountDownTimer
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
@@ -31,7 +32,7 @@ class TimerViewModel(application: Application) : AndroidViewModel(application) {
     var currentScreen by mutableStateOf(PomodoroState.FOCUS)
         private set
 
-    var focusCycleCount by mutableStateOf(0)
+    var focusCycleCount by mutableIntStateOf(0)
 
 
     private var totalFocusTime = PomodoroConfig.FOCUS_TIME
@@ -126,7 +127,6 @@ class TimerViewModel(application: Application) : AndroidViewModel(application) {
      * Hier wird zwischen den verschiedenen Timer Phasen gewechselt
      */
     fun handleTimerFinished() {
-
         playDefaultAlarmSound(getApplication())
 
         if(currentScreen == PomodoroState.FOCUS) {
@@ -170,7 +170,6 @@ class TimerViewModel(application: Application) : AndroidViewModel(application) {
 
             val alarmUri: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM) ?: RingtoneManager.getDefaultUri(
                 RingtoneManager.TYPE_NOTIFICATION)
-
 
             mediaPlayer = MediaPlayer().apply {
                 setDataSource(context, alarmUri)
